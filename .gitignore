@@ -1,8 +1,14 @@
 pyvenv
+__pycache__
 venv
+build
+.\build
 .vscode
 .\scripts
 .\lib
 .\include
 tempCodeRunnerFile.py
 testbookbindingpdf.pdf
+*.spec
+guitutorial.py
+*.pdf
