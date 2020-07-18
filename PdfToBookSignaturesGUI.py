@@ -1,5 +1,6 @@
 # using info from realpython.com and pypdf2
 
+from tkinter import messagebox
 from tkinter import filedialog
 from tkinter import ttk
 import tkinter as tk
@@ -43,6 +44,10 @@ def shufoutput(arrayofarrays):
 
 def doallthestuff(pdf_path, sig_thickness, blank_start, equal_ends_sig, pdf_output_path):
 
+    sig_thickness = int(sig_thickness)
+    blank_start = int(blank_start)
+    equal_ends_sig = int(equal_ends_sig)
+
     # pdf_path = r"C:\Users\user\PythonProjects\PdfToBookSignatures\multipage.pdf"
     # pdf_output_path = "testbookbindingpdf.pdf"
     # sig_thickness = int(input("how many sheets in each sig? "))
@@ -52,7 +57,7 @@ def doallthestuff(pdf_path, sig_thickness, blank_start, equal_ends_sig, pdf_outp
     # or as small as possible? 1 for same, 0 for small '''))
 
     # pdf = Pdfread(str(pdf_path))
-    pdf = Pdfread(pdf_path)
+    pdf = Pdfread(str(pdf_path))
     pdf_page_num = pdf.getNumPages()
     sheets_needed = math.ceil((pdf_page_num / 4))
 
@@ -153,6 +158,7 @@ def doallthestuff(pdf_path, sig_thickness, blank_start, equal_ends_sig, pdf_outp
 
 # ! NEEDS --> pdf_path, sig_thickness, blank_start, equal_ends_sig, pdf_output_path
 
+
 def open_file():
     pdf_path_temp = filedialog.askopenfilename(
         title="Select a PDF file", filetypes=[("pdf files", ".PDF")]
@@ -164,7 +170,7 @@ def open_file():
 
 def output_file():
     pdf_outpath_temp = filedialog.asksaveasfilename(
-        title="Select a PDF file", filetypes=[("pdf files", ".PDF")]
+        title="Select a PDF file", filetypes=[("pdf files", ".PDF")], defaultextension=".pdf"
     )
     pdf_output_path.set(pdf_outpath_temp)
     global glob_pdf_output_path
@@ -172,16 +178,27 @@ def output_file():
 
 
 def process_the_pdf():
-    global glob_pdf_path
-    global glob_sig_thickness
-    glob_sig_thickness = sig_thickness.get()
-    global glob_blank_start
-    glob_blank_start = blank_start.get()
-    global glob_equal_ends_sig
-    glob_equal_ends_sig = equal_ends_sig.get()
-    global glob_pdf_output_path
-    doallthestuff(glob_pdf_path, glob_sig_thickness, glob_blank_start,
-                  glob_equal_ends_sig, glob_pdf_output_path)
+    confirm = tk.messagebox.askyesno(
+        "Doing the thing", "Are you sure you want to do the thing?")
+    if confirm == True:
+        global glob_pdf_path
+        global glob_sig_thickness
+        glob_sig_thickness = str(sig_thickness.get())
+        global glob_blank_start
+        glob_blank_start = str(blank_start.get())
+        global glob_equal_ends_sig
+        glob_equal_ends_sig = str(equal_ends_sig.get())
+        global glob_pdf_output_path
+        try:
+            doallthestuff(glob_pdf_path, glob_sig_thickness, glob_blank_start,
+                          glob_equal_ends_sig, glob_pdf_output_path)
+            messagebox.showinfo("Done!", "This may have worked! or not!")
+        except FileNotFoundError:
+            tk.messagebox.showerror(
+                "File not found", "Either the input file or the output files is wrong.\nOr both of them. Who knows?")
+            pass
+    else:
+        pass
 
 
 root = tk.Tk()
