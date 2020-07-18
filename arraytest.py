@@ -1,9 +1,14 @@
 array = []
-x = 2
+x = 4
 for i in range(x*4):
     array.append(i)
 
-print(array)
+# print(array)
+
+hc = [[0, 1, 2, 3], [4, 5, 6, 7, ], [8, 9, 10, 11], [12, 13, 14, 15]]
+
+for line in hc:
+    print(line)
 
 
 def shuffle(l, n):
@@ -15,8 +20,6 @@ def shuffle(l, n):
     s.append(l[(-2 - n)])
     return s
 
-# feed this a list of pages, multiple of 4
-
 
 def signature_shuffle(pagelist):
     out = []
@@ -25,4 +28,20 @@ def signature_shuffle(pagelist):
     return out
 
 
-print(signature_shuffle(array))
+def shufoutput(arrayofarrays):
+    shuf = []
+    for line in hc:
+        shuf.append(signature_shuffle(line))
+    flat = []
+    for x in shuf:
+        flat.extend(x)
+    return flat
+
+
+# print(signature_shuffle(array))
+print("\n")
+
+thing = shufoutput(hc)
+
+
+print(thing)

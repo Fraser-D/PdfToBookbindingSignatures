@@ -47,7 +47,7 @@ if page_remainder == 0:
 elif sigs == 0:
     blank_ends = (pages_per_sig - pages_total)
 elif equal_ens_sig == 0:
-    blank_ends = (4 - page_remainder)
+    blank_ends = math.ceil(page_remainder / 4) * 4 - page_remainder
 else:
     blank_ends = (pages_per_sig - page_remainder)
 
@@ -68,21 +68,61 @@ for i in range(blank_ends):
     wf.addBlankPage()
 
 
-# * this is the sig shuffle bit - deal with end bits later
+# * this is the sig shuffle bit, makes a list of the new page order
 
-sort_sigs_array = []
-if equal_ens_sig != 0:
-    insigs = wf.getNumPages()
-else:
-    insigs = (wf.getNumPages() - page_remainder - blank_ends)
+def shuffle(l, n):
+    s = []
+    n = n * 2
+    s.append(l[(-1 - n)])
+    s.append(l[(0 + n)])
+    s.append(l[(1 + n)])
+    s.append(l[(-2 - n)])
+    return s
 
-# leftovers = pages - insigs
-for i in range(insigs):
-    sort_sigs_array.append(i)
 
+def signature_shuffle(pagelist):
+    out = []
+    for i in range(len(pagelist)//4):
+        out.extend(shuffle(pagelist, i))
+    return out
+
+
+def shufoutput(arrayofarrays):
+    shuf = []
+    for line in arrayofarrays:
+        shuf.append(signature_shuffle(line))
+    flat = []
+    for x in shuf:
+        flat.extend(x)
+    return flat
+
+
+list_pages = []
+
+for i in range(wf.getNumPages()):
+    list_pages.append(i)
+
+
+def chunker(seq, size):
+    return (seq[pos:pos + size] for pos in range(0, len(seq), size))
+
+
+list_sigs_pages = []
+for group in chunker(list_pages, pages_per_sig):
+    list_sigs_pages.append(group)
+
+newpageorder = shufoutput(list_sigs_pages)
 
 # ! wf - all the pdf and blank pages
 # ! generate array of new page order
+
+newpdf = Pdfwrite()
+
+for page in newpageorder:
+    newpdf.addPage(wf.getPage(page))
+
+wf = newpdf
+
 # ! loop over with:
 # ! getPage -> PageObject
 # ! addPage -> into the writer for output doc

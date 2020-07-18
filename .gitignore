@@ -1,4 +1,6 @@
 pyvenv
+venv
+.vscode
 .\scripts
 .\lib
 .\include
