@@ -111,13 +111,22 @@ def process_the_pdf():
             for page in newpageorder:
                 newpdf.addPage(wf.getPage(page))
 
-            up2 = Pdfwrite()
+            temp = Pdfwrite()
             # up2 = turninto2up(newpdf)
 
-            up2 = newpdf
+            temp = newpdf
 
-            with open(pdf_output_path.get(), 'wb') as out:
-                up2.write(out)
+            destpath = pdf_output_path.get()
+
+            with open(destpath, 'wb+') as out:
+                temp.write(out)
+
+            up2in = Pdfread(destpath)
+
+            up2 = turninto2up(up2in)
+
+            with open(destpath, "wb+") as up2out:
+                up2.write(up2out)
 
             tk.messagebox.showinfo(
                 "Finished", "Finished, and maybe it even worked this time!")
