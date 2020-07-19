@@ -57,7 +57,7 @@ def doallthestuff(pdf_path, sig_thickness, blank_start, equal_ends_sig, pdf_outp
     # or as small as possible? 1 for same, 0 for small '''))
 
     # pdf = Pdfread(str(pdf_path))
-    pdf = Pdfread(str(pdf_path))
+    pdf = Pdfread(pdf_path)
     pdf_page_num = pdf.getNumPages()
     sheets_needed = math.ceil((pdf_page_num / 4))
 
