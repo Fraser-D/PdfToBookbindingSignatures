@@ -113,20 +113,9 @@ def process_the_pdf():
 
             outputfile = open(pdf_output_path.get(), 'wb+')
 
-            wf = newpdf
+            wf = turninto2up(newpdf)
 
             # * this is the output part, turning them into 2up pdf output
-# 2up based on code from https://github.com/mstamy2/PyPDF2/blob/master/Scripts/2-up.py
-
-            wf_2up = Pdfwrite()
-            for iter in range(0, wf.getNumPages()-1, 2):
-                lhs = wf.getPage(iter)
-                rhs = wf.getPage(iter+1)
-                lhs.mergeTranslatedPage(
-                    rhs, lhs.mediaBox.getUpperRight_x(), 0, True)
-                wf_2up.addPage(lhs)
-
-            wf_2up.write(outputfile)
 
             outputfile.close
 
@@ -139,6 +128,18 @@ def process_the_pdf():
             pass
     else:
         pass
+
+
+# 2up based on code from https://github.com/mstamy2/PyPDF2/blob/master/Scripts/2-up.py
+def turninto2up(pdfwr):
+    temp = Pdfwrite()
+    for iter in range(0, pdfwr.getNumPages()-1, 2):
+        lhs = pdfwr.getPage(iter)
+        rhs = pdfwr.getPage(iter+1)
+        lhs.mergeTranslatedPage(
+            rhs, lhs.mediaBox.getUpperRight_x(), 0, True)
+        temp.addPage(lhs)
+    return temp
 
 
 def output_file():
