@@ -112,7 +112,9 @@ def process_the_pdf():
                 newpdf.addPage(wf.getPage(page))
 
             up2 = Pdfwrite()
-            up2 = turninto2up(newpdf)
+            # up2 = turninto2up(newpdf)
+
+            up2 = newpdf
 
             with open(pdf_output_path.get(), 'wb') as out:
                 up2.write(out)
