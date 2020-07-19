@@ -73,18 +73,21 @@ def shufoutput(arrayofarrays):
         flat.extend(x)
     return flat
 
+# pdf_path, pdf_output_path, blank_start replace with thses .get()
+# pdftoproc, pdfdestination, startblanks   removed these
 
-def process_the_pdf(pdftoproc, pdfdestination, startblanks):
+
+def process_the_pdf():
 
     confirm = tk.messagebox.askyesno(
         "Doing the thing", "Are you sure you want to do the thing?")
     if confirm == True:
         try:
-            pdf = Pdfread(pdftoproc.get())
+            pdf = Pdfread(pdf_path.get())
             wf = Pdfwrite()
             wf.appendPagesFromReader(pdf)
 
-            for i in range(startblanks.get()):
+            for i in range(blank_start.get()):
                 wf.insertBlankPage(0)
             for i in range(end_blank_pages.get()):
                 wf.addBlankPage()
@@ -107,7 +110,7 @@ def process_the_pdf(pdftoproc, pdfdestination, startblanks):
             for page in newpageorder:
                 newpdf.addPage(wf.getPage(page))
 
-            outputfile = open(pdfdestination.get(), 'wb+')
+            outputfile = open(pdf_output_path.get(), 'wb+')
 
             wf = newpdf
 
@@ -276,7 +279,7 @@ pdfout_lable.grid(column=0, row=24, sticky="W")
 
 # ? Process the file button
 process_button = ttk.Button(mainf, text="Go and do the thing!",
-                            command=lambda: process_the_pdf(pdf_path, pdf_output_path, blank_start))
+                            command=lambda: process_the_pdf())
 process_button.grid(row=26, column=6, sticky="E")
 
 
