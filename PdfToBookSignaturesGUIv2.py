@@ -111,10 +111,11 @@ def process_the_pdf():
             for page in newpageorder:
                 newpdf.addPage(wf.getPage(page))
 
-            outputfile = open(pdf_output_path.get(), 'wb+')
-
             wf = turninto2up(newpdf)
 
+            outputfile = open(pdf_output_path.get(), 'wb+')
+
+            wf.write(outputfile)
             # * this is the output part, turning them into 2up pdf output
 
             outputfile.close
@@ -136,6 +137,7 @@ def turninto2up(pdfwr):
     for iter in range(0, pdfwr.getNumPages()-1, 2):
         lhs = pdfwr.getPage(iter)
         rhs = pdfwr.getPage(iter+1)
+        # ! this is the problem -->
         lhs.mergeTranslatedPage(
             rhs, lhs.mediaBox.getUpperRight_x(), 0, True)
         temp.addPage(lhs)
