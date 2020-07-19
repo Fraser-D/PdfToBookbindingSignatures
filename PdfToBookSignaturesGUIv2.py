@@ -90,7 +90,7 @@ def process_the_pdf():
 
             for i in range(blank_start.get()):
                 wf.insertBlankPage(0)
-            for i in range(end_blank_pages.get()):
+            for i in range(int(end_blank_pages.get())):
                 wf.addBlankPage()
 
             # ! --> here's where the shuffle goes, pos save temp pdf here?
@@ -111,14 +111,11 @@ def process_the_pdf():
             for page in newpageorder:
                 newpdf.addPage(wf.getPage(page))
 
-            wf = turninto2up(newpdf)
+            up2 = Pdfwrite()
+            up2 = turninto2up(newpdf)
 
-            outputfile = open(pdf_output_path.get(), 'wb+')
-
-            wf.write(outputfile)
-            # * this is the output part, turning them into 2up pdf output
-
-            outputfile.close
+            with open(pdf_output_path.get(), 'wb') as out:
+                up2.write(out)
 
             tk.messagebox.showinfo(
                 "Finished", "Finished, and maybe it even worked this time!")
@@ -134,13 +131,17 @@ def process_the_pdf():
 # 2up based on code from https://github.com/mstamy2/PyPDF2/blob/master/Scripts/2-up.py
 def turninto2up(pdfwr):
     temp = Pdfwrite()
+
+    firstpagesize = pdfwr.getPage(0)
+    offset = firstpagesize.mediaBox.getUpperRight_x()
+
     for iter in range(0, pdfwr.getNumPages()-1, 2):
         lhs = pdfwr.getPage(iter)
         rhs = pdfwr.getPage(iter+1)
         # ! this is the problem -->
-        lhs.mergeTranslatedPage(
-            rhs, lhs.mediaBox.getUpperRight_x(), 0, True)
+        lhs.mergeTranslatedPage(rhs, offset, 0, True)
         temp.addPage(lhs)
+
     return temp
 
 
