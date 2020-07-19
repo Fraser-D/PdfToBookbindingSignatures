@@ -150,7 +150,7 @@ def turninto2up(pdfwr):
         lhs = pdfwr.getPage(iter)
         rhs = pdfwr.getPage(iter+1)
         # ! this is the problem -->
-        lhs.mergeTranslatedPage(rhs, offset, 0, "t")
+        lhs.mergeTranslatedPage(rhs, int(offset), int(0), int(1))
         temp.addPage(lhs)
 
     return temp
