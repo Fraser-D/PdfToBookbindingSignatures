@@ -13,17 +13,10 @@ import os
 import math
 
 
-def open_file():
-    pdf_path.set(filedialog.askopenfilename(
-        title="Select a PDF file", filetypes=[("pdf files", ".PDF")]
-    ))
-    pdf = Pdfread(pdf_path.get())
-    num_of_pages.set(pdf.getNumPages())
-
 # ! I have no idea what these args are, or where they came from :)
 
-
-def update_vars(a, b, c):
+# this had args a,b,c don't know why
+def update_vars(var, indx, mode):
     sigpages = (sig_thickness.get() * 4)
     sig_thickness_x4.set(sigpages)
     newtotal.set(blank_start.get() + num_of_pages.get())
@@ -41,6 +34,14 @@ def update_vars(a, b, c):
         addblankends = math.ceil(leftoverpages / 4) * 4 - leftoverpages
 
     end_blank_pages.set(addblankends)
+
+
+def open_file():
+    pdf_path.set(filedialog.askopenfilename(
+        title="Select a PDF file", filetypes=[("pdf files", ".PDF")]
+    ))
+    pdf = Pdfread(pdf_path.get())
+    num_of_pages.set(pdf.getNumPages())
 
 
 def chunker(seq, size):
@@ -154,34 +155,33 @@ mainf.grid(column=0, row=0, sticky=('N', "W", "S", 'E'))
 root.columnconfigure(0, weight=1)
 root.rowconfigure(0, weight=1)
 
+pdf_path = tk.Variable(root)
+pdf_path.trace_add("write", update_vars)
+sig_thickness = tk.IntVar(root, value=1)
+sig_thickness.trace_add("write", update_vars)
+blank_start = tk.IntVar(root, value=0)
+blank_start.trace_add("write", update_vars)
+equal_ends_sig = tk.BooleanVar(root, value=True)
+equal_ends_sig.trace_add("write", update_vars)
+pdf_output_path = tk.Variable(root)
 
-pdf_path = tk.Variable()
-pdf_path.trace("w", update_vars)
-sig_thickness = tk.IntVar()
-sig_thickness.trace("w", update_vars)
-blank_start = tk.IntVar()
-blank_start.trace("w", update_vars)
-equal_ends_sig = tk.BooleanVar()
-equal_ends_sig.trace("w", update_vars)
-pdf_output_path = tk.Variable()
+sig_thickness_x4 = tk.IntVar(root, value=4)
 
-sig_thickness_x4 = tk.IntVar()
+num_of_pages = tk.IntVar(root, value=0)
+num_of_pages.trace_add("write", update_vars)
 
-num_of_pages = tk.IntVar()
-num_of_pages.trace("w", update_vars)
+sig_count = tk.IntVar(root, value=0)
+sig_count.trace_add("write", update_vars)
+sig_remain = tk.IntVar(root, value=0)
+sig_remain.trace_add("write", update_vars)
+newtotal = tk.IntVar(root, value=0)
+newtotal.trace_add("write", update_vars)
 
-sig_count = tk.IntVar()
-sig_count.trace("w", update_vars)
-sig_remain = tk.IntVar()
-sig_remain.trace("w", update_vars)
-newtotal = tk.IntVar()
-newtotal.trace("w", update_vars)
+end_blank_pages = tk.IntVar(root, value=0)
+# end_blank_pages.trace_add("write", update_vars)
 
-end_blank_pages = tk.IntVar()
-# end_blank_pages.trace("w", update_vars)
 
 # Get pdf file
-
 
 title1 = ttk.Label(mainf, text="Pdf to Bookbinding Signatures")
 title1.grid(column=0, row=0, sticky='W')
