@@ -279,7 +279,7 @@ pdfout_lable.grid(column=0, row=24, sticky="W")
 
 # ? Process the file button
 process_button = ttk.Button(mainf, text="Go and do the thing!",
-                            command=lambda: process_the_pdf())
+                            command=process_the_pdf)
 process_button.grid(row=26, column=6, sticky="E")
 
 
