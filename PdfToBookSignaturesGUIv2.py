@@ -122,8 +122,14 @@ def process_the_pdf():
                 temp.write(out)
 
             up2in = Pdfread(destpath)
+            up2 = Pdfwrite()
 
-            up2 = turninto2up(up2in)
+            for i in range(up2in.getNumPages()):
+                temp = up2in.getPage(i)
+                up2.addPage(temp)
+
+            up2 = frasers2up(up2)
+            # up2 = turninto2up(up2in)
 
             with open(destpath, "wb+") as up2out:
                 up2.write(up2out)
@@ -139,18 +145,41 @@ def process_the_pdf():
         pass
 
 
+def frasers2up(inputPdfFileWriter):
+
+    edited_file = PdfFileWriter()
+    blank_file = PdfFileWriter()
+    leftpage = inputPdfFileWriter.getPage(0)
+    leftx = leftpage.mediaBox.upperRight[0]
+    lefty = leftpage.mediaBox.upperRight[1]
+
+    for page in range(0, inputPdfFileWriter.getNumPages()-1, 2):
+        leftpage = inputPdfFileWriter.getPage(page)
+        rightpage = inputPdfFileWriter.getPage(page+1)
+        leftx = leftpage.mediaBox.upperRight[0]
+        lefty = leftpage.mediaBox.upperRight[1]
+        blank_file.insertBlankPage(leftx, lefty, 0)
+        blank_page = blank_file.getPage(0)
+        # edited_file.insertBlankPage(leftx, lefty, page)
+        blank_page.mergeTranslatedPage(rightpage, leftx, 0, 1)
+        blank_page.mergePage(leftpage)
+        edited_file.addPage(blank_page)
+    #     leftpage, leftx, 0, True)
+    return edited_file
+
+
 # 2up based on code from https://github.com/mstamy2/PyPDF2/blob/master/Scripts/2-up.py
 def turninto2up(pdfwr):
     temp = Pdfwrite()
 
-    firstpagesize = pdfwr.getPage(0)
-    offset = firstpagesize.mediaBox.getUpperRight_x()
+    # firstpagesize = pdfwr.getPage(0)
+    # offset = firstpagesize.mediaBox.getUpperRight_x()
 
     for iter in range(0, pdfwr.getNumPages()-1, 2):
         lhs = pdfwr.getPage(iter)
         rhs = pdfwr.getPage(iter+1)
-        # ! this is the problem -->
-        lhs.mergeTranslatedPage(rhs, int(offset), int(0), int(1))
+        # ! this is the problem -->   doesn't work with odd scanned pdfs! investigate!
+        lhs.mergeTranslatedPage(rhs, lhs.mediaBox.getUpperRight_x(), 0, True)
         temp.addPage(lhs)
 
     return temp
