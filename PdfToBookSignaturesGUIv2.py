@@ -161,7 +161,6 @@ def frasers2up(inputPdfFileWriter):
         lefty = leftpage.mediaBox.upperRight[1]
         blank_file.insertBlankPage(leftx, lefty, 0)
         blank_page = blank_file.getPage(0)
-        # edited_file.insertBlankPage(leftx, lefty, page)
         blank_page.mergeTranslatedPage(rightpage, leftx, 0, 1)
         blank_page.mergePage(leftpage)
         edited_file.addPage(blank_page)
