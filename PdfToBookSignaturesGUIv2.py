@@ -25,7 +25,7 @@ def update_vars(var, indx, mode):
     sig_remain.set(leftoverpages)
 
     if leftoverpages == 0:
-        addblankends = 0,
+        addblankends = 0
     elif sig_count == 0:
         addblankends = (sigpages - newtotal)
     elif equal_ends_sig.get() == 1:
@@ -90,7 +90,8 @@ def process_the_pdf():
 
             for i in range(blank_start.get()):
                 wf.insertBlankPage(0)
-            for i in range(int(end_blank_pages.get())):
+
+            for i in range(end_blank_pages.get()):
                 wf.addBlankPage()
 
             # ! --> here's where the shuffle goes, pos save temp pdf here?
@@ -147,8 +148,8 @@ def process_the_pdf():
 
 def frasers2up(inputPdfFileWriter):
 
-    edited_file = PdfFileWriter()
-    blank_file = PdfFileWriter()
+    edited_file = Pdfwrite()
+    blank_file = Pdfwrite()
     leftpage = inputPdfFileWriter.getPage(0)
     leftx = leftpage.mediaBox.upperRight[0]
     lefty = leftpage.mediaBox.upperRight[1]
@@ -222,6 +223,7 @@ newtotal = tk.IntVar(root, value=0)
 newtotal.trace_add("write", update_vars)
 
 end_blank_pages = tk.IntVar(root, value=0)
+# end_blank_pages.set(0)
 # end_blank_pages.trace_add("write", update_vars)
 
 
