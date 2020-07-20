@@ -6,9 +6,9 @@ import tkinter as tk
 from tkinter import messagebox
 from tkinter import filedialog
 from tkinter import ttk
-from PyPDF2 import PdfFileReader as Pdfread
-from PyPDF2 import PdfFileWriter as Pdfwrite
-from PyPDF2 import PdfFileMerger as Pdfmerge
+from PyPDF4 import PdfFileReader as Pdfread
+from PyPDF4 import PdfFileWriter as Pdfwrite
+from PyPDF4 import PdfFileMerger as Pdfmerge
 import os
 import math
 
@@ -169,7 +169,7 @@ def frasers2up(inputPdfFileWriter):
     return edited_file
 
 
-# 2up based on code from https://github.com/mstamy2/PyPDF2/blob/master/Scripts/2-up.py
+# 2up based on code from https://github.com/mstamy2/PyPDF4/blob/master/Scripts/2-up.py
 def turninto2up(pdfwr):
     temp = Pdfwrite()
 

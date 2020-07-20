@@ -1,9 +1,9 @@
-from PyPDF2 import PdfFileReader
-from PyPDF2 import PdfFileWriter
+from PyPDF4 import PdfFileReader
+from PyPDF4 import PdfFileWriter
 
-# test_file = r"C:\Users\user\Desktop\IMSLP456935-PMLP143602-Op.1_comb.pdf"
+test_file = r"C:\Users\user\Desktop\IMSLP456935-PMLP143602-Op.1_comb.pdf"
 
-# wfin = PdfFileReader(test_file)
+wfin = PdfFileReader(test_file)
 
 
 def frasers2up(inputPdfFileWriter):
@@ -29,8 +29,7 @@ def frasers2up(inputPdfFileWriter):
     return edited_file
 
 
-# edited_file = frasers2up(wfin)
+edited_file = frasers2up(wfin)
 
-# with open(r"C:\Users\user\Desktop\testoutput.pdf", 'w+b') as out_file:
-
-#     edited_file.write(out_file)
+with open(r"C:\Users\user\Desktop\testoutput.pdf", 'w+b') as out_file:
+    edited_file.write(out_file)
